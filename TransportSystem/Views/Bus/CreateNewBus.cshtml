@@ -1,0 +1,100 @@
+﻿@model  BusesViewModel
+
+@{
+    ViewData["Title"] = "CreateNewBus";
+}
+
+<h1>Create New Bus</h1>
+
+<h4>New Bus</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateNewBus">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TerminalId" class="control-label"></label>
+                <select required asp-for="TerminalId" id="Terminal" class="form-control">
+                    <option value="-1">Select a state </option>
+                    @foreach (var terminal in ViewBag.TerminalId)
+                    {
+                        <option value="@terminal.Id">@terminal.TerminalName</option>
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartingTerminalId" class="control-label"></label>
+                <select required asp-for="DepartingTerminalId" id="ArrivalTerminal" class="form-control">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartureTime" class="control-label"></label>
+                <input asp-for="DepartureTime" class="form-control" />
+                <span asp-validation-for="DepartureTime" id="DepartureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BusName" class="control-label"></label>
+                <input asp-for="BusName" class="form-control" />
+                <span asp-validation-for="BusName" id="" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalSeats" class="control-label"></label>
+                <input asp-for="TotalSeats" class="form-control" />
+                <span asp-validation-for="TotalSeats" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsAcAvailable" class="control-label"></label>
+                <input asp-for="IsAcAvailable" class="form-control" />
+                <span asp-validation-for="IsAcAvailable" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsPickUpAvailable" class="control-label"></label>
+                <input asp-for="IsPickUpAvailable" class="form-control" />
+                <span asp-validation-for="IsPickUpAvailable" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input id="no" type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#Terminal').on('change', function () {
+            var terminalId = $('#Terminal option:selected').val();
+            $.ajax({
+                type: 'GET',
+                data: { terminalId: terminalId },
+                url: '@Url.Action("LoadArrivalTerminal", "Bus")',
+                success: function (result) {
+                    //var lga = JSON.parse(result);
+                    var s = '<option value="-1"> Please select a Destination</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+                    }
+                    $('#ArrivalTerminal').html(s);
+                }
+            });
+        });
+    });
+    </script>
+
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

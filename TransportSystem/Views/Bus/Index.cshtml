@@ -1,0 +1,84 @@
+﻿@model IEnumerable<TransportSystem.Data.DbModels.Bus>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Select a Bus</a>
+</p>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BusName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Terminal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DepartingTerminal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DepartureTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalSeats)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsAcAvailable)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsPickUpAvailable)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BusName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Terminal.TerminalName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartingTerminal.DepartingTerminalName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartureTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalSeats)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsAcAvailable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsPickUpAvailable)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}
+    else
+    {
+    <h4>No Bus found going to going to this location</h4>
+    }

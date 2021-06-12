@@ -1,0 +1,121 @@
+﻿@model IEnumerable<TransportSystem.Data.DbModels.Bus>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<p> @ViewBag.Terminal</p>
+<p> @ViewBag.ArrivalTerminal</p>
+<p> @ViewBag.NumberOfAdult</p>
+<p> @ViewBag.DepartureDate</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            
+            <th >
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BusName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Terminal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartingTerminal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartureTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalSeats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAcAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPickUpAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Seat)
+            </th>
+
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td class="BusId">
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BusName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Terminal.TerminalName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartingTerminal.DepartingTerminalName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartureTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalSeats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAcAvailable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPickUpAvailable)
+            </td>
+
+            <td id="seats">
+                <select required  id="DestinationTerminal" class="form-control">
+
+                    </select>
+            </td>
+            <td>
+                <input type="button" class="btn btn-secondary" value="View available seat" id="Seats" />
+            </td>
+
+
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Seats').on('click', function () {
+
+            var BusId = $('#BusId').text();
+            console.log(BusId);
+            $.ajax({
+                type: 'GET',
+                data: { BusId: BusId },
+                url: '@Url.Action("GetAvaibaleSeat", "Home")',
+                success: function (result) {
+                    //var lga = JSON.parse(result);
+                   
+                    var s = '<option value="-1"> Please select a seat</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+                    }
+                    $('#DestinationTerminal').html(s);
+                }
+            });
+        });
+    });
+</script>

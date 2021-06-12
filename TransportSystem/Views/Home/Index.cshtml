@@ -1,0 +1,70 @@
+﻿@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Index</h1>
+
+<h4>Welcome To Emmanuel Motors</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TerminalName" class="control-label"></label>
+                <select required asp-for="TerminalName" id="Terminal" class="form-control">
+                    <option value="-1">Select a state </option>
+                    @foreach (var terminal in ViewBag.Terminal)
+                    {
+                        <option value="@terminal.Id">@terminal.TerminalName</option>
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartingTerminalName" class="control-label"></label>
+                <select required asp-for="DepartingTerminalName" id="DestinationTerminal" class="form-control">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartureDate" class="control-label"></label>
+                <input asp-for="DepartureDate" class="form-control" />
+                <span asp-validation-for="DepartureDate" id="DepartureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfAdult" class="control-label"></label>
+                <input asp-for="NumberOfAdult" class="form-control" />
+                <span asp-validation-for="NumberOfAdult" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input id="no" type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#Terminal').on('change', function () {
+            var terminalId = $('#Terminal option:selected').val();
+            $.ajax({
+                type: 'GET',
+                data: { terminalId: terminalId },
+                url: '@Url.Action("LocalDepartingTerminal", "Home")',
+                success: function (result) {
+                    //var lga = JSON.parse(result);
+                    var s = '<option value="-1"> Please select a Destination</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+                    }
+                    $('#DestinationTerminal').html(s);
+                }
+            });
+        });
+    });
+    </script>
+    
+</div>
