@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TransportSystem.Data.DbModels;
+using TransportSystem.Data.Entities;
 using TransportSystem.ViewModels;
 
 namespace TransportSystem.Profiles
@@ -17,6 +18,7 @@ namespace TransportSystem.Profiles
             CreateMap<DepartingTerminal, HomeViewModel>().ReverseMap();
             CreateMap<BusesViewModel, Bus>().ReverseMap();
             CreateMap<BusSelectionViewModel, Bus>().ReverseMap();
+            CreateMap<AccountViewModel, ApplicationUser>().ReverseMap();
            
 
             //Mapper.CreateMap<CategoriesViewModel, Categoies>()

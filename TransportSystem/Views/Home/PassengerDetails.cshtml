@@ -1,0 +1,68 @@
+﻿@model PassengerDetails
+
+@{
+    ViewData["Title"] = "PassengerDetails";
+}
+
+<h1>Passenger Details</h1>
+
+<h4>Please provide accurate detials as it will be confirm before boarding</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="PassengerDetails">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender">
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TravellerEmail" class="control-label"></label>
+                <input asp-for="TravellerEmail" class="form-control" />
+                <span asp-validation-for="TravellerEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TravellerPhoneNumber" class="control-label"></label>
+                <input asp-for="TravellerPhoneNumber" class="form-control" />
+                <span asp-validation-for="TravellerPhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NextOfKinName" class="control-label"></label>
+                <input asp-for="NextOfKinName" class="form-control" />
+                <span asp-validation-for="NextOfKinName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NextOfKinPhoneNumber" class="control-label"></label>
+                <input asp-for="NextOfKinPhoneNumber" class="form-control" />
+                <span asp-validation-for="NextOfKinPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

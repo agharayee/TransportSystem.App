@@ -1,0 +1,63 @@
+﻿@model AccountViewModel
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TravellerEmail" class="control-label"></label>
+                <input asp-for="TravellerEmail" class="form-control" />
+                <span asp-validation-for="TravellerEmail" id="DepartureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <span asp-validation-for="Gender" id="" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NextOfKinName" class="control-label"></label>
+                <input asp-for="NextOfKinName" class="form-control" />
+                <span asp-validation-for="NextOfKinName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NextOfKinPhoneNumber" class="control-label"></label>
+                <input asp-for="NextOfKinPhoneNumber" class="form-control" />
+                <span asp-validation-for="NextOfKinPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ComfirmPassword" class="control-label"></label>
+                <input asp-for="ComfirmPassword" class="form-control" />
+                <span asp-validation-for="ComfirmPassword" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input id="no" type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

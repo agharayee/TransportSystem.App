@@ -26,6 +26,7 @@ namespace TransportSystem.Controllers
             _logger = logger;
             _service = service;
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -88,11 +89,11 @@ namespace TransportSystem.Controllers
             ViewBag.NumberOfAdult = HttpContext.Session.GetInt32("NumberOfAdult");
             ViewBag.DepartureDate = HttpContext.Session.GetString("DepartureDate");
 
-
+            
             var busToLocation = _context.Buses.Include(b => b.Terminal).Include(b => b.DepartingTerminal).Include(b=> b.Seat).Where
                                                           (b => (b.TerminalID == tid) && (b.DepartingTerminalId == aid));
            
-            
+             
             return View(busToLocation);
            
         }
@@ -102,15 +103,32 @@ namespace TransportSystem.Controllers
 
             var availableSeat = _context.Seats.Where(s => s.BusId == BusId).Where(s => s.IsSeatAvailable == true).Select(l => new
             {
-                id = l.Id,
+                id = l.SeatNumber,
                 name = l.SeatNumber
             }).ToList();
             return Json(availableSeat);
         }
 
-        public IActionResult PassengerDetails()
+        public IActionResult PassengerDetails(int seatNo)
         {
+            string terminal = ViewBag.DepartingTerminal = HttpContext.Session.GetString("DepartingTerminal");
+            int tid = int.Parse(terminal);
+            var foundTerminal = _context.Terminals.FirstOrDefault(t => t.Id == tid);
+            ViewBag.Terminal = foundTerminal.TerminalName;
 
+            string ArrivalTerminal = ViewBag.ArrivalTerminal = HttpContext.Session.GetString("ArrivalTerminal");
+            int aid = int.Parse(ArrivalTerminal);
+            var foundArrivalTerminal = _context.DepartingTerminal.FirstOrDefault(t => t.Id == aid);
+
+            ViewBag.ArrivalTerminal = foundArrivalTerminal.DepartingTerminalName;
+
+            var seatNumber = seatNo;
+            return RedirectToAction("Payment");
+
+        }
+
+        public IActionResult Payment()
+        {
             return View();
         }
     }

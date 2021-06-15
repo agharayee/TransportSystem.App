@@ -51,52 +51,66 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td class="BusId">
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BusName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Terminal.TerminalName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DepartingTerminal.DepartingTerminalName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DepartureTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalSeats)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAcAvailable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPickUpAvailable)
-            </td>
-
-            <td id="seats">
-                <select required  id="DestinationTerminal" class="form-control">
+            <tr>
+                <td id="BusId">
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td> 
+                <td>
+                    @Html.DisplayFor(modelItem => item.BusName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Terminal.TerminalName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartingTerminal.DepartingTerminalName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartureTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalSeats)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAcAvailable)
+                </td>
+                <td >
+                    @Html.DisplayFor(modelItem => item.IsPickUpAvailable)
+                </td>
+                <td >
+                    <select id="DestinationTerminal">
 
                     </select>
-            </td>
-            <td>
-                <input type="button" class="btn btn-secondary" value="View available seat" id="Seats" />
-            </td>
+                    <a  id="button" asp-action="PassengerDetails" class="btn btn-success mt-3 d-none">Proceed</a>
+                </td>
+                
+                <td>
+                    <input type="button"  class="btn btn-secondary"  value="View available seat" id="Seats"/>
+                </td>
 
 
-        </tr>
+            </tr>
         }
     </tbody>
 </table>
 
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#DestinationTerminal').on('change', function () {
+
+            if ($('DestinationTerminal').val == -1) {
+                $('#button').addClass('d-none').hide();
+            } else  
+            $('#button').removeClass('d-none').show();
+        });
+    });
+</script>
+
+
+    <script type="text/javascript">
     $(document).ready(function () {
         $('#Seats').on('click', function () {
 
@@ -108,12 +122,12 @@
                 url: '@Url.Action("GetAvaibaleSeat", "Home")',
                 success: function (result) {
                     //var lga = JSON.parse(result);
-                   
-                    var s = '<option value="-1"> Please select a seat</option>';
+                    var s = '<option value="-1"> Please select a seat Number</option>';
                     for (var i = 0; i < result.length; i++) {
                         s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
                     }
                     $('#DestinationTerminal').html(s);
+                    $('#button').addClass('d-none').hide();
                 }
             });
         });
