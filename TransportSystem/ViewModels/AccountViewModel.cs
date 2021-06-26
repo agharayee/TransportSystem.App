@@ -25,7 +25,7 @@ namespace TransportSystem.ViewModels
         [Display(Name = "Email")]
         [MaxLength(50)]
         [DataType(DataType.EmailAddress, ErrorMessage ="Not a valid email please try again")]
-        public string TravellerEmail { get; set; }
+        public string Email { get; set; }
         
         [Required(ErrorMessage = "Phone Number is required")]
         [Display(Name = "Phone Number")]

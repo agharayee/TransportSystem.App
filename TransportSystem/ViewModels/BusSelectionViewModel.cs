@@ -11,12 +11,13 @@ namespace TransportSystem.ViewModels
     {
         public int Id { get; set; }
         public string BusName { get; set; }
-        //public Terminal Terminal { get; set; }
+       
         [Display(Name ="Departing Terminal")]
-        public int TerminalID { get; set; }
-        //public DepartingTerminal DepartingTerminal { get; set; }
+        public string Terminal { get; set; }
+       
         [Display(Name = "Departing Terminal")]
-        public int DepartingTerminalId { get; set; }
+        public string DepartingTerminal { get; set; }
+       
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
         [DataType(DataType.Time)]
@@ -24,7 +25,7 @@ namespace TransportSystem.ViewModels
         public int TotalSeats { get; set; }
         public bool IsAcAvailable { get; set; }
         public bool IsPickUpAvailable { get; set; }
-        //public List<Seat> Seat { get; set; } = new List<Seat>();
+        public int SelectedSeat { get; set; }
         public int AvailableSeats { get; set; }
     }
 }

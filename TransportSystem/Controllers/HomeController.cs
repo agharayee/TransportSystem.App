@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TransportSystem.Data.Dbcontexts;
+using TransportSystem.Data.Entities;
 using TransportSystem.Models;
 using TransportSystem.Service.HomePageServices;
 using TransportSystem.ViewModels;
@@ -21,12 +24,17 @@ namespace TransportSystem.Controllers
         private readonly IHomePageService _service;
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public HomeController(ILogger<HomeController> logger, IHomePageService service, ApplicationDbContext context, IMapper mapper)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public HomeController(ILogger<HomeController> logger, IHomePageService service, ApplicationDbContext context, 
+                              IMapper mapper, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _logger = logger;
             _service = service;
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -92,12 +100,39 @@ namespace TransportSystem.Controllers
             
             var busToLocation = _context.Buses.Include(b => b.Terminal).Include(b => b.DepartingTerminal).Include(b=> b.Seat).Where
                                                           (b => (b.TerminalID == tid) && (b.DepartingTerminalId == aid));
-           
-             
-            return View(busToLocation);
+
+            var mapped = _mapper.Map<IEnumerable<BusSelectionViewModel>>(busToLocation);
+            //foreach (var item in busToLocation)
+            //{
+            //    var count = item.Seat.Where(s => s.IsSeatAvailable == true).Count();
+            //    var availableSeat = item.TotalSeats - count;
+            //    BusSelectionViewModel bv = new BusSelectionViewModel
+            //    {
+            //        Terminal = item.Terminal.TerminalName,
+            //        DepartingTerminal = item.DepartingTerminal.DepartingTerminalName,
+            //        DepartureTime = item.DepartureTime,
+            //        BusName = item.BusName,
+            //        IsAcAvailable =item.IsAcAvailable,
+            //        IsPickUpAvailable = item.IsPickUpAvailable,
+            //        TotalSeats = item.TotalSeats,
+            //        Amount = item.Amount,
+            //        AvailableSeats = availableSeat,
+            //    };
+            //    return View(bv);
+            //}
+            return View(mapped);
            
         }
 
+        [HttpPost]
+        public IActionResult GetSeatNumber(BusSelectionViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                return Redirect("PassengerDetails");
+            }
+            return View();
+        }
         public IActionResult GetAvaibaleSeat(int BusId)
         {
 
@@ -109,7 +144,7 @@ namespace TransportSystem.Controllers
             return Json(availableSeat);
         }
 
-        public IActionResult PassengerDetails(int seatNo)
+        public async Task<IActionResult> PassengerDetails()
         {
             string terminal = ViewBag.DepartingTerminal = HttpContext.Session.GetString("DepartingTerminal");
             int tid = int.Parse(terminal);
@@ -122,9 +157,35 @@ namespace TransportSystem.Controllers
 
             ViewBag.ArrivalTerminal = foundArrivalTerminal.DepartingTerminalName;
 
-            var seatNumber = seatNo;
-            return RedirectToAction("Payment");
+            if (_signInManager.IsSignedIn(User))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ApplicationUser user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+                PassengerDetails details = new PassengerDetails
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Gender = user.Gender,
+                    TravellerEmail = user.Email,
+                    TravellerPhoneNumber = user.PhoneNumber,
+                    NextOfKinName = user.NextOfKinName,
+                    NextOfKinPhoneNumber = user.NextOfKinPhoneNumber,
+                };
+                return View(details);
+            }
+            else
+                return View();
+            
 
+        }
+        [HttpPost]
+        public IActionResult PassengerDetails(PassengerDetails model)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Payment");
+            }
+            else return View(model);
         }
 
         public IActionResult Payment()

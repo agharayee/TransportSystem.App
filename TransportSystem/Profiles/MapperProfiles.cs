@@ -17,7 +17,9 @@ namespace TransportSystem.Profiles
             CreateMap<Terminal, HomeViewModel>().ReverseMap();
             CreateMap<DepartingTerminal, HomeViewModel>().ReverseMap();
             CreateMap<BusesViewModel, Bus>().ReverseMap();
-            CreateMap<BusSelectionViewModel, Bus>().ReverseMap();
+            CreateMap<Bus, BusSelectionViewModel>().ForMember(des => des.Terminal, opt =>opt.MapFrom(des => des.Terminal.TerminalName))
+                .ForMember(des => des.DepartingTerminal, opt => opt.MapFrom(des => des.DepartingTerminal.DepartingTerminalName))
+                .ReverseMap();
             CreateMap<AccountViewModel, ApplicationUser>().ReverseMap();
            
 

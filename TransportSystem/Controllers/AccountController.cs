@@ -32,7 +32,7 @@ namespace TransportSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Username = model.TravellerEmail;
+                model.Username = model.Email;
                 var user = _mapper.Map<ApplicationUser>(model);
                 var result = await userManager.CreateAsync(user, model.Password);
                 if(result.Succeeded)
